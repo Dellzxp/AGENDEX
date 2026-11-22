@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1600" role="img" aria-label="Agendex">
+  <title>Agendex</title>
+  <g fill="none" stroke-linecap="round">
+    <line x1="372" y1="186" x2="1368" y2="1352" stroke="#5B21E8" stroke-width="196"/>
+    <line x1="268" y1="1196" x2="1480" y2="246" stroke="#FA2B2B" stroke-width="106"/>
+  </g>
+  <circle cx="240" cy="832" r="155" fill="#5B21E8"/>
+  <circle cx="546" cy="1240" r="110" fill="#FA2B2B"/>
+</svg>
