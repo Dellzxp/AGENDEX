@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Agendex — organização pessoal, financeira e coletiva</title>
+  <meta name="description" content="Agenda, finanças pessoais e projetos compartilhados por arquivo. Funciona offline, com os dados no seu dispositivo.">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="application-name" content="Agendex">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Agendex">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    try {
+      var raw = localStorage.getItem('agendex.db.v1');
+      var db = raw ? JSON.parse(raw) : {};
+      var st = db.settings || {};
+      var dark = st.theme === 'dark' || ((!st.theme || st.theme === 'auto') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      if (st.accent) document.documentElement.style.setProperty('--accent', st.accent);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#/overview" aria-label="Agendex — início">
+        <img src="assets/logo.svg" alt="" width="30" height="30">
+        <span class="brand-text"><span class="brand-name">Agendex</span><span class="brand-sub">local-first</span></span>
+      </a>
+
+      <nav class="nav" aria-label="Menu principal">
+        <div class="nav-section">
+          <span class="nav-label">Principal</span>
+          <a class="nav-item" href="#/overview" data-nav="overview"><span class="nav-icon" data-icon="grid"></span>Visão geral</a>
+          <a class="nav-item" href="#/agenda" data-nav="agenda"><span class="nav-icon" data-icon="calendar"></span>Agenda</a>
+          <a class="nav-item" href="#/finance" data-nav="finance"><span class="nav-icon" data-icon="wallet"></span>Financeiro</a>
+          <a class="nav-item" href="#/projects" data-nav="projects"><span class="nav-icon" data-icon="folder"></span>Projetos</a>
+          <a class="nav-item" href="#/reports" data-nav="reports"><span class="nav-icon" data-icon="chart"></span>Relatórios</a>
+        </div>
+        <div class="nav-section">
+          <span class="nav-label">Sistema</span>
+          <a class="nav-item" href="#/support" data-nav="support"><span class="nav-icon" data-icon="heart"></span>Apoie o Agendex</a>
+          <a class="nav-item" href="#/settings" data-nav="settings"><span class="nav-icon" data-icon="settings"></span>Configurações</a>
+          <a class="nav-item" href="#/help" data-nav="help"><span class="nav-icon" data-icon="info"></span>Ajuda e sobre</a>
+        </div>
+      </nav>
+
+      <button class="storage-status" id="storage-status" type="button" title="Abrir configurações de armazenamento">
+        <span class="status-dot local" id="storage-dot"></span>
+        <span class="storage-text"><span id="storage-label">Salvo neste navegador</span><small>Dados locais</small></span>
+      </button>
+    </aside>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Abrir menu"><span data-icon="menu"></span></button>
+          <div class="page-title">
+            <h1 id="page-title">Visão geral</h1>
+            <p id="page-sub">Tudo o que importa hoje</p>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button class="search-trigger" id="search-trigger" type="button" aria-label="Pesquisar">
+            <span data-icon="search"></span>
+            <span class="search-text">Pesquisar</span>
+            <kbd>Ctrl K</kbd>
+          </button>
+          <button class="icon-btn notif-btn" id="notif-btn" type="button" aria-label="Notificações">
+            <span data-icon="bell"></span>
+            <span class="notif-count hidden" id="notif-count">0</span>
+          </button>
+          <button class="icon-btn install-btn hidden" id="install-btn" type="button" aria-label="Instalar aplicativo" title="Instalar aplicativo">
+            <span data-icon="download"></span>
+          </button>
+          <div class="quick-wrap">
+            <button class="btn primary" id="quick-add" type="button"><span data-icon="plus"></span>Novo</button>
+            <div class="menu" id="quick-menu" hidden>
+              <span class="menu-label">Criar</span>
+              <button data-quick="event"><span data-icon="calendar"></span>Evento</button>
+              <button data-quick="task"><span data-icon="check"></span>Tarefa</button>
+              <button data-quick="income"><span data-icon="arrowUp"></span>Receita</button>
+              <button data-quick="expense"><span data-icon="arrowDown"></span>Despesa</button>
+              <button data-quick="transfer"><span data-icon="transfer"></span>Transferência</button>
+              <span class="menu-sep"></span>
+              <button data-quick="project"><span data-icon="folder"></span>Projeto</button>
+              <button data-quick="goal"><span data-icon="target"></span>Meta</button>
+              <button data-quick="account"><span data-icon="wallet"></span>Conta</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-banner" id="app-banner"></div>
+      <div class="app-banner update" id="update-banner"></div>
+      <main id="view" class="view"></main>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Navegação principal no celular">
+    <a href="#/overview" data-nav="overview"><span data-icon="grid"></span><span>Início</span></a>
+    <a href="#/agenda" data-nav="agenda"><span data-icon="calendar"></span><span>Agenda</span></a>
+    <a href="#/finance" data-nav="finance"><span data-icon="wallet"></span><span>Financeiro</span></a>
+    <a href="#/projects" data-nav="projects"><span data-icon="folder"></span><span>Projetos</span></a>
+    <a href="#/reports" data-nav="reports"><span data-icon="chart"></span><span>Relatórios</span></a>
+  </nav>
+
+  <div id="modal-root"></div>
+  <div id="toast-root"></div>
+
+  <noscript><div class="noscript">O Agendex precisa de JavaScript habilitado para funcionar.</div></noscript>
+
+  <script src="js/util.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/logic.js"></script>
+  <script src="js/share.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/views/overview.js"></script>
+  <script src="js/views/agenda.js"></script>
+  <script src="js/views/finance.js"></script>
+  <script src="js/views/projects.js"></script>
+  <script src="js/views/reports.js"></script>
+  <script src="js/views/settings.js"></script>
+  <script src="js/views/support.js"></script>
+  <script src="js/views/help.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.querySelectorAll('[data-icon]').forEach(function (el) {
+      if (window.Agendex && Agendex.U) el.innerHTML = Agendex.U.icon(el.getAttribute('data-icon'), 18);
+    });
+  </script>
+</body>
+</html>
